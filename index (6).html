@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex" />
+<title>The Screening Room — Where films and filmmakers get found</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Archivo:wght@400;500;700&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: #0E0D0B; }
+  ::selection { background: #E0A458; color: #0E0D0B; }
+  button { font-family: inherit; }
+  button:focus-visible, [tabindex]:focus-visible { outline: 2px solid #E0A458; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+const { useState } = React;
+
+/* ------------------------------------------------------------------ */
+/*  Design tokens — screening room                                      */
+/* ------------------------------------------------------------------ */
+const T = {
+  bg: "#0E0D0B", surface: "#181613", surface2: "#211E1A", line: "#2E2A24",
+  text: "#F1EBDD", sub: "#9A937F", amber: "#E0A458", amberDim: "#8A6A3E",
+};
+const display = "'Cormorant Garamond', serif";
+const body = "'Archivo', sans-serif";
+
+/* ------------------------------------------------------------------ */
+/*  Mock data                                                           */
+/*  EDIT HERE: titles / synopses / credits are placeholders.            */
+/*  Works w1 and w2 use the real trailers (yt = YouTube video ID).      */
+/* ------------------------------------------------------------------ */
+const CREATORS = {
+  c5: {
+    id: "c5", name: "Derek Ziegler", role: "Director / Writer / Editor",
+    bio: "Orlando-based filmmaker behind the collective Rotten Rabbit. A 48 Hour Film Project regular, writing, directing, shooting and editing his own shorts.",
+    awards: [
+      "48HFP Orlando 2022 — Best Writing, Directing, Cinematography & Editing (A Murder Most Trivial)",
+      "48HFP Orlando — Best Film 1st Place, Best Writing (Picture Perfect)",
+      "Love Your Shorts Film Festival 2023 — Official Selection",
+    ],
+    sns: { YouTube: "https://youtube.com/RottenRabbitTV" },
+    status: "Released", statusWork: "Haze / The Deal",
+  },
+  c6: {
+    id: "c6", name: "Julia Dansereau", role: "Actor / Producer",
+    bio: "Actor and producer. Plays Ashleigh in Haze.",
+    awards: [],
+    sns: {},
+    status: "Released", statusWork: "Haze",
+  },
+  c7: {
+    id: "c7", name: "Amanda Diaz", role: "Actor",
+    bio: "Actor. Plays Mariah in Haze.",
+    awards: [],
+    sns: {},
+    status: "Released", statusWork: "Haze",
+  },
+  c1: {
+    id: "c1", name: "Jun Yoriko", role: "Director / Writer",
+    bio: "Leads an independent film collective. A regular at 48-hour film competitions, exploring improvisation under constraint.",
+    awards: ["48HFP Tokyo 2024 — Jury Special Prize", "TINFF 2025 — Official Selection"],
+    sns: { Instagram: "#", X: "#", YouTube: "#" },
+    status: "In production", statusWork: "Next project",
+  },
+  c2: {
+    id: "c2", name: "Akari Mizuhara", role: "Actor",
+    bio: "Stage-trained actor working mainly in short film. Known for quiet stillness that carries tension.",
+    awards: ["New Filmmakers Festival 2025 — Best Lead nominee"],
+    sns: { Instagram: "#", X: "#" },
+    status: "In development", statusWork: "First film as director",
+  },
+  c3: {
+    id: "c3", name: "Gaku Onodera", role: "Cinematographer",
+    bio: "Cinematographer with a music-video background. Prefers natural light and long takes.",
+    awards: [],
+    sns: { Instagram: "#", YouTube: "#" },
+    status: "In edit", statusWork: "The Pier",
+  },
+  c4: {
+    id: "c4", name: "Nozomu Haida", role: "Composer",
+    bio: "Builds scores from modular synths and field recordings. Writing music for dark rooms.",
+    awards: [],
+    sns: { X: "#" },
+    status: "Released", statusWork: "Score Collection vol.2",
+  },
+};
+
+/* Collectives — the third entity type: films ↔ people ↔ groups */
+const COLLECTIVES = {
+  g1: {
+    id: "g1",
+    name: "Rotten Rabbit",
+    tagline: "Independent film collective — Orlando, FL",
+    bio: "A filmmaking collective led by Derek Ziegler, producing shorts and web series since 2018. Regulars at the 48 Hour Film Project Orlando, with multiple category wins.",
+    members: ["c5", "c6", "c7"],
+    sns: { YouTube: "https://youtube.com/RottenRabbitTV" },
+  },
+};
+
+const WORKS = [
+  {
+    id: "w1",
+    title: "Haze",
+    year: 2025, min: 8,
+    yt: "g4vC9yPKymU",              /* swap with w2's ID if reversed */
+    collective: "g1",
+    genre: ["Horror", "Thriller"],
+    synopsis: "After surviving a kidnapping, a young woman tells her story on television — and draws the unsettling attention of a local journalist. A Rotten Rabbit production.",
+    credits: [
+      { role: "Director / Writer", id: "c5" },
+      { role: "Cast — Ashleigh", id: "c6" },
+      { role: "Cast — Mariah", id: "c7" },
+    ],
+    editorsPick: true,
+    hue: "#3A2E22",
+    reviews: [
+      { user: "filmnerd_92", stars: 5, spoiler: false, text: "Sample review — the reviews here are placeholders you can post over." },
+    ],
+    likes: 128,
+  },
+  {
+    id: "w2",
+    title: "The Deal",
+    year: 2026, min: 2,
+    yt: "tAHg0Pm5aUM",              /* swap with w1's ID if reversed */
+    collective: "g1",
+    genre: ["Short"],
+    synopsis: "Trailer for The Deal, a 2026 short from Rotten Rabbit, written and directed by Derek Ziegler. Synopsis coming soon.",
+    credits: [
+      { role: "Director / Writer", id: "c5" },
+    ],
+    editorsPick: false,
+    hue: "#22303A",
+    reviews: [
+      { user: "shortfilm_diary", stars: 4, spoiler: false, text: "Sample review for the second trailer." },
+    ],
+    likes: 86,
+  },
+  {
+    id: "w3",
+    title: "Carousel Speed", year: 2025, min: 8,
+    genre: ["Comedy"],
+    synopsis: "The caretaker of a shuttered amusement park runs the empty merry-go-round every night. One night, the speed lever breaks. (Sample work — no video attached.)",
+    credits: [
+      { role: "Director / Writer", id: "c1" },
+      { role: "Cinematography", id: "c3" },
+    ],
+    editorsPick: false, hue: "#3A2237",
+    reviews: [
+      { user: "8mm_love", stars: 5, spoiler: false, text: "A perfect three-act structure in eight minutes." },
+      { user: "nightview", stars: 3, spoiler: true, text: "Saw the ending coming, but I can't forget how they shot the park at night." },
+    ],
+    likes: 214,
+  },
+  {
+    id: "w4",
+    title: "Letters Arrive on Monday", year: 2025, min: 19,
+    genre: ["Drama", "Sci-Fi"],
+    synopsis: "At a post office where letters arrive from one week in the past, a clerk holds on to a single envelope with no sender. (Sample work — no video attached.)",
+    credits: [
+      { role: "Director", id: "c2" },
+      { role: "Music", id: "c4" },
+    ],
+    editorsPick: false, hue: "#2E3522",
+    reviews: [],
+    likes: 42,
+  },
+];
+
+/* ------------------------------------------------------------------ */
+/*  Small parts                                                         */
+/* ------------------------------------------------------------------ */
+const Stars = ({ n, size = 13, onPick }) => (
+  <span style={{ letterSpacing: 2, fontSize: size, color: T.amber, cursor: onPick ? "pointer" : "default", userSelect: "none" }}>
+    {[1, 2, 3, 4, 5].map((i) => (
+      <span key={i} onClick={onPick ? () => onPick(i) : undefined} style={{ opacity: i <= n ? 1 : 0.25 }}>★</span>
+    ))}
+  </span>
+);
+
+const Tag = ({ children }) => (
+  <span style={{ fontSize: 11, padding: "3px 10px", border: `1px solid ${T.line}`, borderRadius: 999, color: T.sub, letterSpacing: 1 }}>{children}</span>
+);
+
+const StatusBadge = ({ status }) => (
+  <span style={{ fontSize: 10.5, padding: "3px 9px", letterSpacing: 1.5, textTransform: "uppercase", color: T.amber, border: `1px solid ${T.amberDim}`, borderRadius: 2 }}>{status}</span>
+);
+
+/* Thumbnail: real YouTube thumbnail when the work has a video ID */
+const Thumb = ({ work, h = 150, onClick }) => (
+  <div onClick={onClick} style={{
+    height: h, borderRadius: 3, position: "relative",
+    cursor: onClick ? "pointer" : "default",
+    display: "flex", alignItems: "flex-end", overflow: "hidden",
+    border: `1px solid ${T.line}`,
+    background: work.yt
+      ? `#000 url(https://img.youtube.com/vi/${work.yt}/hqdefault.jpg) center/cover no-repeat`
+      : `linear-gradient(160deg, ${work.hue}, ${T.bg} 90%)`,
+  }}>
+    <div style={{ position: "absolute", inset: 0, background: work.yt ? "linear-gradient(to top, rgba(0,0,0,.75), rgba(0,0,0,.05) 55%)" : "none" }} />
+    <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 10, background: "#000" }} />
+    <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 10, background: "#000" }} />
+    <div style={{
+      padding: "0 14px 18px", fontFamily: display, fontWeight: 700,
+      fontSize: h > 200 ? 30 : 19, color: T.text, lineHeight: 1.2,
+      textShadow: "0 1px 8px rgba(0,0,0,.7)", position: "relative",
+    }}>{work.title}</div>
+    <div style={{ position: "absolute", top: 16, right: 12, fontSize: 10.5, color: T.sub, letterSpacing: 1, textShadow: "0 1px 4px #000" }}>{work.min} min</div>
+  </div>
+);
+
+/* ------------------------------------------------------------------ */
+/*  Main app                                                            */
+/* ------------------------------------------------------------------ */
+function App() {
+  const [view, setView] = useState({ page: "home" });
+  const [works, setWorks] = useState(WORKS);
+  const [follows, setFollows] = useState({});
+  const [liked, setLiked] = useState({});
+  const [draft, setDraft] = useState({ stars: 0, text: "", spoiler: false });
+  const [showSpoiler, setShowSpoiler] = useState({});
+
+  const goWork = (id) => { setDraft({ stars: 0, text: "", spoiler: false }); setView({ page: "work", id }); window.scrollTo(0, 0); };
+  const goCreator = (id) => { setView({ page: "creator", id }); window.scrollTo(0, 0); };
+  const goCollective = (id) => { setView({ page: "collective", id }); window.scrollTo(0, 0); };
+  const goHome = () => { setView({ page: "home" }); window.scrollTo(0, 0); };
+
+  const toggleFollow = (id) => setFollows((f) => ({ ...f, [id]: !f[id] }));
+  const toggleLike = (id) => {
+    setLiked((l) => ({ ...l, [id]: !l[id] }));
+    setWorks((ws) => ws.map((w) => w.id === id ? { ...w, likes: w.likes + (liked[id] ? -1 : 1) } : w));
+  };
+  const postReview = (workId) => {
+    if (!draft.stars || !draft.text.trim()) return;
+    setWorks((ws) => ws.map((w) => w.id === workId ? { ...w, reviews: [{ user: "You", ...draft }, ...w.reviews] } : w));
+    setDraft({ stars: 0, text: "", spoiler: false });
+  };
+
+  const avg = (w) => w.reviews.length ? (w.reviews.reduce((s, r) => s + r.stars, 0) / w.reviews.length).toFixed(1) : null;
+
+  return (
+    <div style={{ background: T.bg, color: T.text, minHeight: "100vh", fontFamily: body }}>
+      <header style={{
+        display: "flex", alignItems: "baseline", gap: 18, flexWrap: "wrap",
+        padding: "20px 22px 16px", borderBottom: `1px solid ${T.line}`,
+        position: "sticky", top: 0, background: `${T.bg}F2`, backdropFilter: "blur(8px)", zIndex: 10,
+      }}>
+        <div onClick={goHome} style={{ fontFamily: display, fontWeight: 700, fontSize: 24, cursor: "pointer", letterSpacing: 1 }}>
+          The Screening Room<span style={{ color: T.amber }}>.</span>
+          <span style={{ fontSize: 10.5, color: T.sub, marginLeft: 12, letterSpacing: 3, fontFamily: body, fontWeight: 400, textTransform: "uppercase" }}>Where films and filmmakers get found</span>
+        </div>
+        <nav style={{ marginLeft: "auto", display: "flex", gap: 18, fontSize: 12.5, color: T.sub }}>
+          <span onClick={goHome} style={{ cursor: "pointer", color: view.page === "home" ? T.amber : T.sub }}>Discover</span>
+          <span style={{ cursor: "pointer" }}>Submit a film</span>
+        </nav>
+      </header>
+
+      <main style={{ maxWidth: 880, margin: "0 auto", padding: "26px 22px 80px" }}>
+        {view.page === "home" && <Home works={works} avg={avg} goWork={goWork} goCreator={goCreator} />}
+        {view.page === "work" && (
+          <WorkPage
+            work={works.find((w) => w.id === view.id)}
+            avg={avg} liked={liked} toggleLike={toggleLike}
+            goCreator={goCreator} goWork={goWork} goCollective={goCollective} works={works}
+            draft={draft} setDraft={setDraft} postReview={postReview}
+            showSpoiler={showSpoiler} setShowSpoiler={setShowSpoiler}
+          />
+        )}
+        {view.page === "creator" && (
+          <CreatorPage
+            creator={CREATORS[view.id]} works={works}
+            follows={follows} toggleFollow={toggleFollow}
+            goWork={goWork} goCollective={goCollective} avg={avg}
+          />
+        )}
+        {view.page === "collective" && (
+          <CollectivePage
+            collective={COLLECTIVES[view.id]} works={works}
+            follows={follows} toggleFollow={toggleFollow}
+            goWork={goWork} goCreator={goCreator} avg={avg}
+          />
+        )}
+      </main>
+
+      <footer style={{ borderTop: `1px solid ${T.line}`, padding: "18px 22px", fontSize: 11, color: T.sub, letterSpacing: 1 }}>
+        The Screening Room — interactive prototype. Data is not saved.
+      </footer>
+    </div>
+  );
+}
+
+const SectionTitle = ({ children }) => (
+  <div style={{ display: "flex", alignItems: "center", gap: 14, margin: "42px 0 16px" }}>
+    <span style={{ fontFamily: display, fontSize: 20, fontWeight: 700, letterSpacing: 1 }}>{children}</span>
+    <span style={{ flex: 1, height: 1, background: T.line }} />
+  </div>
+);
+
+/* ------------------------------------------------------------------ */
+/*  Home (Discovery)                                                    */
+/* ------------------------------------------------------------------ */
+function Home({ works, avg, goWork, goCreator }) {
+  const pick = works.find((w) => w.editorsPick);
+  const ranked = [...works].slice().sort((a, b) => b.likes - a.likes);
+  return (
+    <div>
+      <div style={{ fontSize: 11, letterSpacing: 3, color: T.amber, marginBottom: 10, textTransform: "uppercase" }}>Editor's pick</div>
+      <Thumb work={pick} h={300} onClick={() => goWork(pick.id)} />
+      <div style={{ display: "flex", gap: 14, alignItems: "baseline", margin: "14px 2px 6px", flexWrap: "wrap" }}>
+        <span style={{ fontFamily: display, fontSize: 26, fontWeight: 700, cursor: "pointer" }} onClick={() => goWork(pick.id)}>{pick.title}</span>
+        <span style={{ color: T.sub, fontSize: 12 }}>{pick.year} · {pick.min} min</span>
+        {avg(pick) && <span style={{ fontSize: 13 }}><Stars n={Math.round(avg(pick))} /> <span style={{ color: T.sub, fontSize: 12 }}>{avg(pick)}</span></span>}
+      </div>
+      <p style={{ color: T.sub, fontSize: 13.5, lineHeight: 1.8, maxWidth: 620, margin: "0 2px" }}>{pick.synopsis}</p>
+      <div style={{ margin: "10px 2px 0", fontSize: 12.5, color: T.sub }}>
+        Directed by{" "}
+        <span onClick={() => goCreator(pick.credits[0].id)} style={{ color: T.amber, cursor: "pointer" }}>
+          {CREATORS[pick.credits[0].id].name}
+        </span>
+      </div>
+
+      <SectionTitle>New in The Screening Room</SectionTitle>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
+        {works.map((w) => (
+          <div key={w.id}>
+            <Thumb work={w} onClick={() => goWork(w.id)} />
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 8 }}>
+              <span onClick={() => goWork(w.id)} style={{ fontSize: 13.5, fontWeight: 500, cursor: "pointer" }}>{w.title}</span>
+              {avg(w) && <span style={{ fontSize: 11, color: T.sub }}>★ {avg(w)}</span>}
+            </div>
+            <div style={{ display: "flex", gap: 6, marginTop: 6, flexWrap: "wrap" }}>{w.genre.map((g) => <Tag key={g}>{g}</Tag>)}</div>
+          </div>
+        ))}
+      </div>
+
+      <SectionTitle>Most liked</SectionTitle>
+      <div style={{ border: `1px solid ${T.line}`, borderRadius: 3 }}>
+        {ranked.map((w, i) => (
+          <div key={w.id} onClick={() => goWork(w.id)} style={{
+            display: "flex", alignItems: "baseline", gap: 16, padding: "13px 16px",
+            borderBottom: i < ranked.length - 1 ? `1px solid ${T.line}` : "none", cursor: "pointer",
+          }}>
+            <span style={{ fontFamily: display, color: i === 0 ? T.amber : T.sub, width: 22, fontSize: 17 }}>{i + 1}</span>
+            <span style={{ fontSize: 14 }}>{w.title}</span>
+            <span style={{ marginLeft: "auto", fontSize: 12, color: T.sub }}>♥ {w.likes}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Film page                                                           */
+/* ------------------------------------------------------------------ */
+function WorkPage({ work, avg, liked, toggleLike, goCreator, goWork, goCollective, works, draft, setDraft, postReview, showSpoiler, setShowSpoiler }) {
+  const related = works.filter((w) =>
+    w.id !== work.id && w.credits.some((c) => work.credits.some((c2) => c2.id === c.id))
+  );
+  return (
+    <div>
+      {work.yt ? (
+        <div style={{ aspectRatio: "16/9", borderRadius: 3, overflow: "hidden", border: `1px solid ${T.line}`, background: "#000" }}>
+          <iframe
+            width="100%" height="100%"
+            src={`https://www.youtube-nocookie.com/embed/${work.yt}`}
+            title={work.title}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            style={{ display: "block" }}
+          />
+        </div>
+      ) : (
+        <div style={{
+          aspectRatio: "16/9", background: `linear-gradient(160deg, ${work.hue}, #000)`,
+          borderRadius: 3, display: "flex", alignItems: "center", justifyContent: "center",
+          border: `1px solid ${T.line}`, color: T.sub, fontSize: 12, letterSpacing: 2,
+        }}>
+          ▶ Video coming soon
+        </div>
+      )}
+
+      {work.collective && (
+        <div onClick={() => goCollective(work.collective)} style={{
+          marginTop: 18, fontSize: 11, letterSpacing: 3, textTransform: "uppercase",
+          color: T.amber, cursor: "pointer",
+        }}>A {COLLECTIVES[work.collective].name} film →</div>
+      )}
+
+      <div style={{ display: "flex", alignItems: "baseline", gap: 14, margin: "20px 0 4px", flexWrap: "wrap" }}>
+        <h1 style={{ fontFamily: display, fontSize: 36, fontWeight: 700, margin: 0 }}>{work.title}</h1>
+        <span style={{ color: T.sub, fontSize: 13 }}>{work.year} · {work.min} min</span>
+        <button onClick={() => toggleLike(work.id)} style={{
+          marginLeft: "auto", background: "none", cursor: "pointer",
+          border: `1px solid ${liked[work.id] ? T.amber : T.line}`,
+          color: liked[work.id] ? T.amber : T.sub,
+          padding: "6px 14px", borderRadius: 999, fontSize: 12.5,
+        }}>♥ {work.likes}</button>
+      </div>
+      <div style={{ display: "flex", gap: 8, margin: "8px 0 16px", flexWrap: "wrap" }}>{work.genre.map((g) => <Tag key={g}>{g}</Tag>)}</div>
+      <p style={{ color: T.text, fontSize: 14, lineHeight: 1.9, maxWidth: 640, opacity: 0.9 }}>{work.synopsis}</p>
+
+      <SectionTitle>Credits</SectionTitle>
+      <div style={{ maxWidth: 480 }}>
+        {work.credits.map((c) => (
+          <div key={c.role + c.id} style={{ display: "flex", alignItems: "baseline", padding: "9px 0", borderBottom: `1px dotted ${T.line}` }}>
+            <span style={{ fontSize: 10.5, letterSpacing: 2, color: T.sub, width: 150, textTransform: "uppercase" }}>{c.role}</span>
+            <span onClick={() => goCreator(c.id)} style={{ fontFamily: display, fontSize: 17, color: T.text, cursor: "pointer" }}>
+              {CREATORS[c.id].name}
+            </span>
+            <span onClick={() => goCreator(c.id)} style={{ marginLeft: "auto", fontSize: 11, color: T.amber, cursor: "pointer" }}>Profile →</span>
+          </div>
+        ))}
+      </div>
+
+      <SectionTitle>Reviews {work.reviews.length > 0 ? <span style={{ color: T.sub, fontSize: 12, fontFamily: body, fontWeight: 400 }}> avg ★{avg(work)} ({work.reviews.length})</span> : null}</SectionTitle>
+
+      <div style={{ background: T.surface, border: `1px solid ${T.line}`, borderRadius: 3, padding: 16, marginBottom: 22 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 10 }}>
+          <Stars n={draft.stars} size={18} onPick={(i) => setDraft((d) => ({ ...d, stars: i }))} />
+          <label style={{ fontSize: 11.5, color: T.sub, display: "flex", alignItems: "center", gap: 6, cursor: "pointer" }}>
+            <input type="checkbox" checked={draft.spoiler} onChange={(e) => setDraft((d) => ({ ...d, spoiler: e.target.checked }))} />
+            Contains spoilers
+          </label>
+        </div>
+        <textarea
+          value={draft.text}
+          onChange={(e) => setDraft((d) => ({ ...d, text: e.target.value }))}
+          placeholder="Write your review"
+          rows={3}
+          style={{
+            width: "100%", boxSizing: "border-box", background: T.bg, color: T.text,
+            border: `1px solid ${T.line}`, borderRadius: 3, padding: 10, fontSize: 13.5,
+            fontFamily: body, resize: "vertical",
+          }}
+        />
+        <button onClick={() => postReview(work.id)} disabled={!draft.stars || !draft.text.trim()} style={{
+          marginTop: 10, background: draft.stars && draft.text.trim() ? T.amber : T.surface2,
+          color: draft.stars && draft.text.trim() ? T.bg : T.sub,
+          border: "none", padding: "8px 22px", borderRadius: 2, fontSize: 13, fontWeight: 700,
+          cursor: draft.stars && draft.text.trim() ? "pointer" : "default", letterSpacing: 1,
+        }}>Post review</button>
+      </div>
+
+      {work.reviews.length === 0 && (
+        <div style={{ color: T.sub, fontSize: 13 }}>No reviews yet. Be the first to write one.</div>
+      )}
+      {work.reviews.map((r, i) => (
+        <div key={i} style={{ padding: "14px 0", borderBottom: `1px solid ${T.line}` }}>
+          <div style={{ display: "flex", gap: 12, alignItems: "baseline", marginBottom: 6 }}>
+            <span style={{ fontSize: 13, fontWeight: 700 }}>{r.user}</span>
+            <Stars n={r.stars} />
+            {r.spoiler && <span style={{ fontSize: 10.5, color: T.amber }}>Spoilers</span>}
+          </div>
+          {r.spoiler && !showSpoiler[work.id + i] ? (
+            <button onClick={() => setShowSpoiler((s) => ({ ...s, [work.id + i]: true }))} style={{
+              background: T.surface2, color: T.sub, border: `1px solid ${T.line}`,
+              padding: "6px 14px", borderRadius: 2, fontSize: 12, cursor: "pointer",
+            }}>Show spoiler</button>
+          ) : (
+            <p style={{ fontSize: 13.5, lineHeight: 1.8, color: T.text, opacity: 0.85, margin: 0 }}>{r.text}</p>
+          )}
+        </div>
+      ))}
+
+      {related.length > 0 && (
+        <React.Fragment>
+          <SectionTitle>More from the people behind this film</SectionTitle>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
+            {related.map((w) => (
+              <div key={w.id}>
+                <Thumb work={w} onClick={() => goWork(w.id)} />
+                <div style={{ fontSize: 13, marginTop: 8, cursor: "pointer" }} onClick={() => goWork(w.id)}>{w.title}</div>
+              </div>
+            ))}
+          </div>
+        </React.Fragment>
+      )}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Creator page                                                        */
+/* ------------------------------------------------------------------ */
+function CreatorPage({ creator, works, follows, toggleFollow, goWork, goCollective, avg }) {
+  const filmo = works.filter((w) => w.credits.some((c) => c.id === creator.id));
+  const following = follows[creator.id];
+  const memberOf = Object.values(COLLECTIVES).filter((g) => g.members.includes(creator.id));
+  return (
+    <div>
+      <div style={{ display: "flex", gap: 22, alignItems: "flex-start", flexWrap: "wrap" }}>
+        <div style={{
+          width: 88, height: 88, borderRadius: "50%", background: T.surface2,
+          border: `1px solid ${T.line}`, display: "flex", alignItems: "center", justifyContent: "center",
+          fontFamily: display, fontSize: 36, color: T.amber, flexShrink: 0,
+        }}>{creator.name[0]}</div>
+        <div style={{ flex: 1, minWidth: 240 }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 12, flexWrap: "wrap" }}>
+            <h1 style={{ fontFamily: display, fontSize: 32, fontWeight: 700, margin: 0 }}>{creator.name}</h1>
+            <span style={{ color: T.sub, fontSize: 12, letterSpacing: 1 }}>{creator.role}</span>
+          </div>
+          <p style={{ color: T.sub, fontSize: 13.5, lineHeight: 1.8, margin: "10px 0 12px", maxWidth: 560 }}>{creator.bio}</p>
+          <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+            <button onClick={() => toggleFollow(creator.id)} style={{
+              background: following ? "transparent" : T.amber,
+              color: following ? T.amber : T.bg,
+              border: `1px solid ${T.amber}`, padding: "8px 22px", borderRadius: 999,
+              fontSize: 13, fontWeight: 700, cursor: "pointer", letterSpacing: 1,
+            }}>{following ? "Following" : "Follow"}</button>
+            {memberOf.map((g) => (
+              <span key={g.id} onClick={() => goCollective(g.id)} style={{
+                fontSize: 11.5, color: T.amber, border: `1px solid ${T.amberDim}`,
+                padding: "6px 12px", borderRadius: 999, cursor: "pointer",
+              }}>{g.name}</span>
+            ))}
+            {Object.keys(creator.sns).map((s) => (
+              <a key={s} href={creator.sns[s]} style={{ fontSize: 11.5, color: T.sub, textDecoration: "none", border: `1px solid ${T.line}`, padding: "6px 12px", borderRadius: 999 }}>{s}</a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <SectionTitle>Now making</SectionTitle>
+      <div style={{ display: "flex", alignItems: "center", gap: 14, background: T.surface, border: `1px solid ${T.line}`, borderRadius: 3, padding: "14px 18px", flexWrap: "wrap" }}>
+        <StatusBadge status={creator.status} />
+        <span style={{ fontSize: 13.5 }}>{creator.statusWork}</span>
+        <span style={{ marginLeft: "auto", fontSize: 11.5, color: T.sub }}>Read the production diary →</span>
+      </div>
+
+      {creator.awards.length > 0 && (
+        <React.Fragment>
+          <SectionTitle>Awards & selections</SectionTitle>
+          {creator.awards.map((a) => (
+            <div key={a} style={{ fontSize: 13, color: T.text, opacity: 0.85, padding: "7px 0", borderBottom: `1px dotted ${T.line}` }}>◆ {a}</div>
+          ))}
+        </React.Fragment>
+      )}
+
+      <SectionTitle>Filmography</SectionTitle>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
+        {filmo.map((w) => {
+          const role = w.credits.find((c) => c.id === creator.id).role;
+          return (
+            <div key={w.id}>
+              <Thumb work={w} onClick={() => goWork(w.id)} />
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 8 }}>
+                <span onClick={() => goWork(w.id)} style={{ fontSize: 13.5, cursor: "pointer" }}>{w.title}</span>
+                <span style={{ fontSize: 10, color: T.sub, letterSpacing: 1, textTransform: "uppercase" }}>{role}</span>
+              </div>
+              {avg(w) && <div style={{ fontSize: 11, color: T.sub, marginTop: 4 }}>★ {avg(w)}</div>}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Collective page                                                     */
+/* ------------------------------------------------------------------ */
+function CollectivePage({ collective, works, follows, toggleFollow, goWork, goCreator, avg }) {
+  const filmo = works.filter((w) => w.collective === collective.id);
+  const following = follows[collective.id];
+  return (
+    <div>
+      <div style={{ fontSize: 11, letterSpacing: 3, color: T.sub, textTransform: "uppercase", marginBottom: 8 }}>Collective</div>
+      <h1 style={{ fontFamily: display, fontSize: 40, fontWeight: 700, margin: 0 }}>{collective.name}</h1>
+      <div style={{ color: T.sub, fontSize: 12.5, letterSpacing: 1, margin: "6px 0 14px" }}>{collective.tagline}</div>
+      <p style={{ color: T.sub, fontSize: 13.5, lineHeight: 1.8, maxWidth: 560, margin: "0 0 14px" }}>{collective.bio}</p>
+      <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+        <button onClick={() => toggleFollow(collective.id)} style={{
+          background: following ? "transparent" : T.amber,
+          color: following ? T.amber : T.bg,
+          border: `1px solid ${T.amber}`, padding: "8px 22px", borderRadius: 999,
+          fontSize: 13, fontWeight: 700, cursor: "pointer", letterSpacing: 1,
+        }}>{following ? "Following" : "Follow"}</button>
+        {Object.keys(collective.sns).map((s) => (
+          <a key={s} href={collective.sns[s]} style={{ fontSize: 11.5, color: T.sub, textDecoration: "none", border: `1px solid ${T.line}`, padding: "6px 12px", borderRadius: 999 }}>{s}</a>
+        ))}
+      </div>
+
+      <SectionTitle>Members</SectionTitle>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 14 }}>
+        {collective.members.map((id) => {
+          const m = CREATORS[id];
+          return (
+            <div key={id} onClick={() => goCreator(id)} style={{
+              display: "flex", alignItems: "center", gap: 12, cursor: "pointer",
+              background: T.surface, border: `1px solid ${T.line}`, borderRadius: 3, padding: "12px 14px",
+            }}>
+              <div style={{
+                width: 40, height: 40, borderRadius: "50%", background: T.surface2,
+                border: `1px solid ${T.line}`, display: "flex", alignItems: "center", justifyContent: "center",
+                fontFamily: display, fontSize: 17, color: T.amber, flexShrink: 0,
+              }}>{m.name[0]}</div>
+              <div>
+                <div style={{ fontSize: 13.5, fontWeight: 500 }}>{m.name}</div>
+                <div style={{ fontSize: 10.5, color: T.sub, letterSpacing: 1, textTransform: "uppercase" }}>{m.role}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <SectionTitle>Films</SectionTitle>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
+        {filmo.map((w) => (
+          <div key={w.id}>
+            <Thumb work={w} onClick={() => goWork(w.id)} />
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 8 }}>
+              <span onClick={() => goWork(w.id)} style={{ fontSize: 13.5, cursor: "pointer" }}>{w.title}</span>
+              {avg(w) && <span style={{ fontSize: 11, color: T.sub }}>★ {avg(w)}</span>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
