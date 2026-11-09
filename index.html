@@ -247,6 +247,47 @@ const WORKS = [
   },
 ];
 
+/* Echoes full crew — bulk entries (id, name, role). Each gets an auto profile. */
+const ECHOES_CREW = [
+  ["c11", "Daisuke Uchiyama", "Dinosaur Manipulation"],
+  ["c12", "Kenji Okizaki", "Dinosaur Manipulation"],
+  ["c13", "Koji Kato", "Dinosaur Manipulation"],
+  ["c14", "Masashi Kamegawa", "Dinosaur Manipulation"],
+  ["c15", "Takayoshi Kondo", "Dinosaur Manipulation"],
+  ["c16", "Shinpei Shimizu", "Dinosaur Manipulation"],
+  ["c17", "Yosuke Suzuki", "Dinosaur Manipulation"],
+  ["c18", "Norito Nakazawa", "Dinosaur Manipulation"],
+  ["c19", "Yuji Nara", "Dinosaur Manipulation"],
+  ["c20", "Osamu Hasegawa", "Dinosaur Manipulation"],
+  ["c21", "Kazuhisa Hayashida", "Dinosaur Manipulation"],
+  ["c22", "Futa Miyatani", "Dinosaur Manipulation"],
+  ["c23", "Masashi Meki", "Dinosaur Manipulation"],
+  ["c24", "Shogo Mochizuki", "Dinosaur Manipulation"],
+  ["c25", "Ryusei Yagami", "Dinosaur Manipulation"],
+  ["c26", "Naoya Yoshida", "Dinosaur Manipulation"],
+  ["c27", "Ryushi Yoshimoto", "Dinosaur Manipulation"],
+  ["c28", "Shintaro Izumi", "Staff"],
+  ["c29", "Yurie Saegusa", "Staff"],
+  ["c30", "Marie Suzuki", "Staff"],
+  ["c31", "Kazuya Kanemaru", "Dinosaur Supervision"],
+  ["c32", "Akemi Kozuka", "Dinosaur Supervision"],
+  ["c33", "Kei Takagi", "Dinosaur Staff"],
+  ["c34", "Ryo Gyokuten", "Dinosaur Staff"],
+  ["c35", "Kotomi Jinbo", "Dinosaur Staff"],
+  ["c36", "Riko Todate", "Dinosaur Staff"],
+  ["c37", "Erika Kishida", "Dinosaur Staff"],
+  ["c38", "Ryoko Ichimura", "Dinosaur Staff"],
+  ["c39", "Yasuhiro Izumi", "Dinosaur Staff"],
+  ["c40", "Tatsuhiko Asano", "Dinosaur SE"],
+];
+ECHOES_CREW.forEach(([id, name, role]) => {
+  CREATORS[id] = {
+    id, name, role,
+    bio: (role === "Dinosaur Supervision" ? "Dinosaur supervision (ON-ART). " : "") + role + " on Echoes.",
+    awards: [], sns: {}, status: "Released", statusWork: "Echoes",
+  };
+});
+
 /* Activity feed — derived from project updates, not a blog creators must write */
 const UPDATES = [
   { who: "c1", kind: "Status", text: "Next project moved into development", when: "2d ago" },
@@ -254,6 +295,9 @@ const UPDATES = [
   { who: "c3", kind: "Production", text: "The Pier — edit locked", when: "2w ago" },
   { who: "c2", kind: "Release", text: "Letters Arrive on Monday published", when: "3w ago" },
 ];
+
+/* Attach the full crew to the Echoes end-roll */
+WORKS[0].credits.push(...ECHOES_CREW.map(([id, , role]) => ({ role, id })));
 
 /* ------------------------------------------------------------------ */
 /*  Small parts                                                         */
