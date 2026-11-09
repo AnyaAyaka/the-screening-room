@@ -84,6 +84,31 @@ const CREATORS = {
     sns: { Instagram: "https://www.instagram.com/iida_raura/" },
     status: "Released", statusWork: "Echoes",
   },
+  c41: {
+    id: "c41", name: "Shun Nishime", role: "Actor",
+    bio: "Actor. Appears in Sunflower.",
+    awards: [], sns: {}, status: "Released", statusWork: "Sunflower",
+  },
+  c42: {
+    id: "c42", name: "Kanoa", role: "Actor",
+    bio: "Actor. Appears in Sunflower.",
+    awards: [], sns: {}, status: "Released", statusWork: "Sunflower",
+  },
+  c43: {
+    id: "c43", name: "Hayato Nishi", role: "Actor",
+    bio: "Actor. Appears in Sunflower.",
+    awards: [], sns: {}, status: "Released", statusWork: "Sunflower",
+  },
+  c44: {
+    id: "c44", name: "Hitomi Fujiwara", role: "Actor",
+    bio: "Actor. Appears in Sunflower.",
+    awards: [], sns: {}, status: "Released", statusWork: "Sunflower",
+  },
+  c45: {
+    id: "c45", name: "Yukari", role: "Actor",
+    bio: "Actor. Appears in Sunflower.",
+    awards: [], sns: {}, status: "Released", statusWork: "Sunflower",
+  },
   c10: {
     id: "c10", name: "MAFUYU", role: "Hair & Makeup",
     bio: "Hair and makeup artist.",
@@ -204,6 +229,52 @@ const WORKS = [
     reviews: [],
     likes: 54,
     views: 730,
+  },
+  {
+    id: "w6",
+    title: "Sunflower",
+    year: 2025, min: 15,            /* EDIT: confirm year and runtime */
+    mp4: "sunflower-trailer.mp4",
+    poster: "sunflower-poster.jpg",
+    videoNote: "Official trailer — full film coming soon",
+    collective: "g1",
+    genre: ["Drama"],               /* EDIT: real genre */
+    synopsis: "Synopsis coming soon. A Paradigm Shift production.",
+    credits: [
+      { role: "Director", id: "c1" },   /* EDIT: confirm credits and roles */
+      { role: "Cast", id: "c41" },
+      { role: "Cast", id: "c42" },
+      { role: "Cast", id: "c43" },
+      { role: "Cast", id: "c9" },
+      { role: "Cast", id: "c44" },
+      { role: "Cast", id: "c45" },
+      { role: "Cast", id: "c7" },
+    ],
+    editorsPick: false,
+    hue: "#3A3322",
+    reviews: [],
+    likes: 61,
+    views: 540,
+  },
+  {
+    id: "w7",
+    title: "The Tuner",
+    year: 2026, min: 7,             /* EDIT: confirm year and runtime */
+    poster: "tuner-poster.jpg",
+    collective: "g1",
+    genre: ["Drama"],               /* EDIT: real genre */
+    synopsis: "Made for the 48 Hour Film Project. Synopsis coming soon. A Paradigm Shift production.",
+    credits: [
+      { role: "Director", id: "c1" },   /* EDIT: confirm credits */
+    ],
+    editorsPick: false,
+    hue: "#1F2B33",
+    reviews: [],
+    likes: 38,
+    views: 480,
+    festival: [
+      { festival: "48 Hour Film Project", type: "selected", verified: false },
+    ],
   },
   {
     id: "w2",
@@ -365,11 +436,13 @@ const Thumb = ({ work, h = 150, onClick }) => (
     cursor: onClick ? "pointer" : "default",
     display: "flex", alignItems: "flex-end", overflow: "hidden",
     border: `1px solid ${T.line}`,
-    background: work.yt
+    background: work.poster
+      ? `#000 url(${work.poster}) center/cover no-repeat`
+      : work.yt
       ? `#000 url(https://img.youtube.com/vi/${work.yt}/hqdefault.jpg) center/cover no-repeat`
       : `linear-gradient(160deg, ${work.hue}, ${T.bg} 90%)`,
   }}>
-    <div style={{ position: "absolute", inset: 0, background: work.yt ? "linear-gradient(to top, rgba(0,0,0,.75), rgba(0,0,0,.05) 55%)" : "none" }} />
+    <div style={{ position: "absolute", inset: 0, background: (work.yt || work.poster) ? "linear-gradient(to top, rgba(0,0,0,.75), rgba(0,0,0,.05) 55%)" : "none" }} />
     <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 10, background: "#000" }} />
     <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 10, background: "#000" }} />
     <div style={{
@@ -597,6 +670,23 @@ function WorkPage({ work, avg, liked, toggleLike, goCreator, goWork, goCollectiv
             allowFullScreen
             style={{ display: "block" }}
           />
+        </div>
+      ) : work.mp4 ? (
+        <div style={{ borderRadius: 3, overflow: "hidden", border: `1px solid ${T.line}`, background: "#000" }}>
+          <video controls preload="metadata" poster={work.poster} style={{ display: "block", width: "100%", maxHeight: 560 }}>
+            <source src={work.mp4} type="video/mp4" />
+          </video>
+          {work.videoNote && (
+            <div style={{ padding: "8px 14px", fontSize: 11, letterSpacing: 2, color: T.sub, textTransform: "uppercase", borderTop: `1px solid ${T.line}` }}>{work.videoNote}</div>
+          )}
+        </div>
+      ) : work.poster ? (
+        <div style={{
+          aspectRatio: "16/9", borderRadius: 3, border: `1px solid ${T.line}`,
+          background: `#000 url(${work.poster}) center/contain no-repeat`,
+          display: "flex", alignItems: "flex-end", justifyContent: "center",
+        }}>
+          <div style={{ padding: 10, fontSize: 11, letterSpacing: 2, color: T.sub, background: "rgba(0,0,0,.6)", borderRadius: 2, marginBottom: 12 }}>▶ Video coming soon</div>
         </div>
       ) : (
         <div style={{
