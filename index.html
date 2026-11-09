@@ -50,11 +50,41 @@ const body = "'Archivo', sans-serif";
 /* ------------------------------------------------------------------ */
 const CREATORS = {
   c5: {
-    id: "c5", name: "Jack Strange", role: "Actor",
-    bio: "Lead actor in Julia Never Dies. Bio coming soon.",
+    id: "c5", name: "Mick Nakamura", role: "Actor",
+    bio: "Actor. Plays Jack Strange in Julia Never Dies.",
     awards: [],
     sns: {},
     status: "Released", statusWork: "Julia Never Dies",
+  },
+  c46: {
+    id: "c46", name: "Hanna Senbokuya", role: "Actor",
+    bio: "Actor. Plays Julia in Julia Never Dies.",
+    awards: [], sns: {}, status: "Released", statusWork: "Julia Never Dies",
+  },
+  c48: {
+    id: "c48", name: "Jouji Shibue", role: "Actor",
+    bio: "Actor. Plays Daniel Brown in @Smile; Best Actor nominee at the 48 Hour Film Project Los Angeles 2025.",
+    awards: [], sns: {}, status: "Released", statusWork: "@Smile",
+  },
+  c49: {
+    id: "c49", name: "Shinnosuke Takahashi", role: "Actor",
+    bio: "Actor. Appears in @Smile.",
+    awards: [], sns: {}, status: "Released", statusWork: "@Smile",
+  },
+  c50: {
+    id: "c50", name: "Hachizo Hino", role: "Actor",
+    bio: "Actor. Appears in @Smile.",
+    awards: [], sns: {}, status: "Released", statusWork: "@Smile",
+  },
+  c51: {
+    id: "c51", name: "Seitaro Sugano", role: "Executive Producer",
+    bio: "Executive producer on Paradigm Shift films.",
+    awards: [], sns: {}, status: "Released", statusWork: "Phoenix / @Smile",
+  },
+  c52: {
+    id: "c52", name: "Ayaka Uchida", role: "Team Leader / Subtitles / Translation",
+    bio: "Team leader, subtitles and translation on Paradigm Shift's 48 Hour Film Project films. International liaison for the collective.",
+    awards: [], sns: {}, status: "In development", statusWork: "Next Paradigm Shift entry",
   },
   c6: {
     id: "c6", name: "Miho Barton", role: "Subtitles / Translation",
@@ -153,7 +183,7 @@ const COLLECTIVES = {
     name: "Paradigm Shift",
     tagline: "Independent film collective",
     bio: "A film collective led by Jun Yoriko, writing in Japanese and shooting in English for international audiences. Entered the 48 Hour Film Project through to the global round.",
-    members: ["c1", "c6", "c5"],        /* EDIT: add the rest of the team (dinosaur crew etc.) */
+    members: ["c1", "c52", "c6", "c5"], /* EDIT: add the rest of the team (dinosaur crew etc.) */
     sns: { Instagram: "#", YouTube: "#" },
   },
 };
@@ -195,12 +225,15 @@ const WORKS = [
     title: "Julia Never Dies",
     year: 2026, min: 5,             /* EDIT: real runtime */
     /* yt: "PASTE_ID_HERE", */      /* EDIT: uncomment when its video is online */
+    poster: "julia-poster.jpg",
     collective: "g1",
-    genre: ["Music Video"],
-    synopsis: "A live-action PV made inside the 48 Hour Film Project: written in Japanese, shot in English, and built around one required line. \"There's got to be more to life than this.\" A Paradigm Shift production.",
+    genre: ["Music Video", "Zombie"],
+    synopsis: "A live-action PV made inside the 48 Hour Film Project London 2026: written in Japanese, shot in English, and built around one required line. \"There's got to be more to life than this.\" A Paradigm Shift production.",
     credits: [
-      { role: "Director / Writer", id: "c1" },
-      { role: "Cast", id: "c5" },   /* EDIT: add the other lead and crew */
+      { role: "Director / Screenplay / Cinematography / Editing", id: "c1" },
+      { role: "Cast — Julia", id: "c46" },
+      { role: "Cast — Jack Strange", id: "c5" },
+      { role: "Team Leader / Subtitles", id: "c52" },
     ],
     editorsPick: false,
     hue: "#3A2E22",
@@ -210,7 +243,7 @@ const WORKS = [
     likes: 128,
     views: 920,
     festival: [
-      { festival: "48 Hour Film Project", year: 2026, type: "selected", detail: "Global round", verified: true },
+      { festival: "48 Hour Film Project", year: 2026, type: "selected", detail: "London", verified: true },
     ],
   },
   {
@@ -233,15 +266,18 @@ const WORKS = [
   {
     id: "w6",
     title: "Sunflower",
-    year: 2025, min: 15,            /* EDIT: confirm year and runtime */
+    year: 2026, min: 15,            /* EDIT: confirm runtime */
     mp4: "sunflower-trailer.mp4",
-    poster: "sunflower-poster.jpg",
+    poster: "sunflower-art.jpg",
     videoNote: "Official trailer — full film coming soon",
     collective: "g1",
     genre: ["Drama"],               /* EDIT: real genre */
-    synopsis: "Synopsis coming soon. A Paradigm Shift production.",
+    synopsis: "Made for the 48 Hour Film Project Los Angeles 2026. Synopsis coming soon. A Paradigm Shift production.",
+    festival: [
+      { festival: "48 Hour Film Project", year: 2026, type: "selected", detail: "Los Angeles", verified: true },
+    ],
     credits: [
-      { role: "Director", id: "c1" },   /* EDIT: confirm credits and roles */
+      { role: "Director / Screenplay / Cinematography / Editing / Sound Design", id: "c1" },
       { role: "Cast", id: "c41" },
       { role: "Cast", id: "c42" },
       { role: "Cast", id: "c43" },
@@ -274,6 +310,64 @@ const WORKS = [
     views: 480,
     festival: [
       { festival: "48 Hour Film Project", type: "selected", verified: false },
+    ],
+  },
+  {
+    id: "w8",
+    title: "Phoenix",
+    year: 2024, min: 7,             /* EDIT: real runtime */
+    poster: "phoenix-poster.jpg",
+    collective: "g1",
+    genre: ["Action"],              /* EDIT: real genre */
+    synopsis: "Made for the 48 Hour Film Project London 2024. Synopsis coming soon. A Paradigm Shift production.",
+    credits: [
+      { role: "Director / Scenario / Photography / Editing / Music", id: "c1" },
+      { role: "Cast — Mirai", id: "c9" },
+      { role: "Cast — Kenta", id: "c7" },
+      { role: "Cast — Kanae", id: "c44" },
+      { role: "Team Leader / Subtitles", id: "c52" },
+      { role: "Executive Producer", id: "c51" },
+    ],
+    editorsPick: false,
+    hue: "#33221F",
+    reviews: [],
+    likes: 47,
+    views: 390,
+    festival: [
+      { festival: "48 Hour Film Project", year: 2024, type: "selected", detail: "London", verified: true },
+    ],
+  },
+  {
+    id: "w9",
+    title: "@Smile",
+    year: 2025, min: 6,             /* EDIT: real runtime */
+    poster: "smile-poster.jpg",
+    collective: "g1",
+    genre: ["Horror", "Comedy"],
+    synopsis: "A 2030 emotion-monitoring dystopia where one glitchy smile sets off endless laughs and chills. Made in 48 hours for the Los Angeles 48 Hour Film Horror Comedy Project 2025. A Paradigm Shift production.",
+    credits: [
+      { role: "Director", id: "c1" },
+      { role: "Cast — Daniel Brown", id: "c48" },
+      { role: "Cast — Daniel's Wife", id: "c9" },
+      { role: "Cast — Kickboard Man", id: "c49" },
+      { role: "Cast — Male Store Clerk", id: "c50" },
+      { role: "Cast — Woman", id: "c44" },
+      { role: "Team Leader / Translation", id: "c52" },
+      { role: "Action Instruction", id: "c28" },
+      { role: "Assistant", id: "c30" },
+      { role: "Executive Producer", id: "c51" },
+    ],
+    editorsPick: false,
+    hue: "#262626",
+    reviews: [],
+    likes: 73,
+    views: 860,
+    festival: [
+      { festival: "48 Hour Film Project", year: 2025, type: "won", award: "Best Film — 2nd Place", detail: "Los Angeles · Horror Comedy", verified: true },
+      { festival: "48 Hour Film Project", year: 2025, type: "won", award: "Best Directing", who: "c1", verified: true },
+      { festival: "48 Hour Film Project", year: 2025, type: "won", award: "Best Cinematography", verified: true },
+      { festival: "48 Hour Film Project", year: 2025, type: "won", award: "Best Editing", verified: true },
+      { festival: "48 Hour Film Project", year: 2025, type: "nominated", award: "Best Actor", who: "c48", verified: true },
     ],
   },
   {
