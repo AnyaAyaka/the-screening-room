@@ -56,6 +56,41 @@ const CREATORS = {
     sns: {},
     status: "Released", statusWork: "Julia Never Dies",
   },
+  c6: {
+    id: "c6", name: "Miho Barton", role: "Subtitles / Translation",
+    bio: "Named Woman Filmmaker of the Year at the 48 Hour Film Project Los Angeles 2025. Subtitled Echoes.",
+    awards: [],
+    sns: {},
+    status: "Released", statusWork: "Echoes",
+  },
+  c7: {
+    id: "c7", name: "Yosuke Nishi", role: "Actor",
+    bio: "Actor. Played Kanade in Echoes; Best Actor nominee at the 48 Hour Film Project Los Angeles 2025.",
+    awards: [],
+    sns: { Instagram: "https://www.instagram.com/yosuke_nishi_photo/" },
+    status: "Released", statusWork: "Echoes",
+  },
+  c8: {
+    id: "c8", name: "Shouma Yamamoto", role: "Actor",
+    bio: "Actor. Played Mizuki Kent in Echoes.",
+    awards: [],
+    sns: {},
+    status: "Released", statusWork: "Echoes",
+  },
+  c9: {
+    id: "c9", name: "Raura Iida", role: "Actor",
+    bio: "Actor. Played Rachel Kent in Echoes; Best Actress nominee at the 48 Hour Film Project Los Angeles 2025.",
+    awards: [],
+    sns: { Instagram: "https://www.instagram.com/iida_raura/" },
+    status: "Released", statusWork: "Echoes",
+  },
+  c10: {
+    id: "c10", name: "MAFUYU", role: "Hair & Makeup",
+    bio: "Hair and makeup artist.",
+    awards: [],
+    sns: { Instagram: "https://www.instagram.com/mafuyu_makeup/" },
+    status: "Released", statusWork: "Echoes",
+  },
   c1: {
     id: "c1", name: "Jun Yoriko", role: "Director / Writer",
     bio: "Filmmaker behind the Paradigm Shift collective. Writes in Japanese, shoots in English, and builds films inside 48-hour constraints.",
@@ -93,7 +128,7 @@ const COLLECTIVES = {
     name: "Paradigm Shift",
     tagline: "Independent film collective",
     bio: "A film collective led by Jun Yoriko, writing in Japanese and shooting in English for international audiences. Entered the 48 Hour Film Project through to the global round.",
-    members: ["c1", "c5"],              /* EDIT: add the rest of the team */
+    members: ["c1", "c6", "c5"],        /* EDIT: add the rest of the team (dinosaur crew etc.) */
     sns: { Instagram: "#", YouTube: "#" },
   },
 };
@@ -106,9 +141,14 @@ const WORKS = [
     yt: "-PSCbWVB6SQ",
     collective: "g1",
     genre: ["Thriller", "Buddy Film"],
-    synopsis: "Made in 48 hours for the 48 Hour Film Project Los Angeles 2025. A thriller-suspense buddy film. A Paradigm Shift production.",
+    synopsis: "Winner of Best Film of 2025 (1st Place) at the 48 Hour Film Project Los Angeles. A thriller-suspense buddy film with dinosaurs, made in 48 hours. A Paradigm Shift production.",
     credits: [
-      { role: "Director", id: "c1" },   /* EDIT: add cast and crew */
+      { role: "Director / Script / Cinematography / Edit / Art / Music", id: "c1" },
+      { role: "Cast — Kanade", id: "c7" },
+      { role: "Cast — Mizuki Kent", id: "c8" },
+      { role: "Cast — Rachel Kent", id: "c9" },
+      { role: "Subtitles", id: "c6" },
+      { role: "Hair & Makeup", id: "c10" },
     ],
     editorsPick: true,
     hue: "#2A3038",
@@ -116,7 +156,13 @@ const WORKS = [
     likes: 96,
     views: 1840,
     festival: [
-      { festival: "48 Hour Film Project", year: 2025, type: "selected", detail: "Los Angeles · Aug 1-3, 2025", verified: true },
+      { festival: "48 Hour Film Project", year: 2025, type: "won", award: "Best Film of 2025 — 1st Place", detail: "Los Angeles", verified: true },
+      { festival: "48 Hour Film Project", year: 2025, type: "won", award: "Best Directing", who: "c1", verified: true },
+      { festival: "48 Hour Film Project", year: 2025, type: "won", award: "Best Cinematography", verified: true },
+      { festival: "48 Hour Film Project", year: 2025, type: "won", award: "Best Production Design", verified: true },
+      { festival: "48 Hour Film Project", year: 2025, type: "won", award: "Woman Filmmaker of the Year", who: "c6", verified: true },
+      { festival: "48 Hour Film Project", year: 2025, type: "nominated", award: "Best Actor", who: "c7", verified: true },
+      { festival: "48 Hour Film Project", year: 2025, type: "nominated", award: "Best Actress", who: "c9", verified: true },
     ],
   },
   {
