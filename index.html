@@ -99,21 +99,21 @@ const CREATORS = {
     status: "In development", statusWork: "Next project",
   },
   c2: {
-    id: "c2", name: "Akari Mizuhara", role: "Actor",
+    id: "c2", name: "Akari Mizuhara", role: "Actor", sample: true,
     bio: "Stage-trained actor working mainly in short film. Known for quiet stillness that carries tension.",
     awards: ["New Filmmakers Festival 2025 — Best Lead nominee"],
     sns: { Instagram: "#", X: "#" },
     status: "In development", statusWork: "First film as director",
   },
   c3: {
-    id: "c3", name: "Gaku Onodera", role: "Cinematographer",
+    id: "c3", name: "Gaku Onodera", role: "Cinematographer", sample: true,
     bio: "Cinematographer with a music-video background. Prefers natural light and long takes.",
     awards: [],
     sns: { Instagram: "#", YouTube: "#" },
     status: "In edit", statusWork: "The Pier",
   },
   c4: {
-    id: "c4", name: "Nozomu Haida", role: "Composer",
+    id: "c4", name: "Nozomu Haida", role: "Composer", sample: true,
     bio: "Builds scores from modular synths and field recordings. Writing music for dark rooms.",
     awards: [],
     sns: { X: "#" },
@@ -191,7 +191,7 @@ const WORKS = [
   {
     id: "w2",
     title: "The Pier",
-    year: 2026, min: 15,
+    year: 2026, min: 15, sample: true,
     genre: ["Drama"],
     synopsis: "A dock worker coming off a night shift and a runaway high-schooler share three near-silent hours on the pier, waiting for the first train. (Sample work — no video attached.)",
     credits: [
@@ -207,13 +207,13 @@ const WORKS = [
     likes: 86,
     views: 640,
     festival: [
-      { festival: "Harbour Shorts", year: 2026, type: "nominated", award: "Best Actress", who: "c2", verified: true },
+      { festival: "Harbour Shorts", year: 2026, type: "nominated", award: "Best Actress", who: "c2", verified: false },
       { festival: "Harbour Shorts", year: 2026, type: "won", award: "Audience Award", verified: false },
     ],
   },
   {
     id: "w3",
-    title: "Carousel Speed", year: 2025, min: 8,
+    title: "Carousel Speed", year: 2025, min: 8, sample: true,
     genre: ["Comedy"],
     synopsis: "The caretaker of a shuttered amusement park runs the empty merry-go-round every night. One night, the speed lever breaks. (Sample work — no video attached.)",
     credits: [
@@ -233,7 +233,7 @@ const WORKS = [
   },
   {
     id: "w4",
-    title: "Letters Arrive on Monday", year: 2025, min: 19,
+    title: "Letters Arrive on Monday", year: 2025, min: 19, sample: true,
     genre: ["Drama", "Sci-Fi"],
     synopsis: "At a post office where letters arrive from one week in the past, a clerk holds on to a single envelope with no sender. (Sample work — no video attached.)",
     credits: [
@@ -318,6 +318,11 @@ const StatusBadge = ({ status }) => (
   <span style={{ fontSize: 10.5, padding: "3px 9px", letterSpacing: 1.5, textTransform: "uppercase", color: T.amber, border: `1px solid ${T.amberDim}`, borderRadius: 2 }}>{status}</span>
 );
 
+/* Marks invented demo data, so it can't be mistaken for a real film or person */
+const SampleBadge = () => (
+  <span style={{ fontSize: 9, letterSpacing: 2, color: T.sub, border: `1px solid ${T.line}`, padding: "2px 7px", borderRadius: 2, textTransform: "uppercase" }}>Sample</span>
+);
+
 /* One festival result: selection / nomination / win, with festival verification */
 const ResultChip = ({ e, workTitle }) => (
   <div style={{ display: "flex", alignItems: "baseline", gap: 10, padding: "9px 0", borderBottom: `1px dotted ${T.line}`, flexWrap: "wrap" }}>
@@ -356,6 +361,9 @@ const Thumb = ({ work, h = 150, onClick }) => (
       textShadow: "0 1px 8px rgba(0,0,0,.7)", position: "relative",
     }}>{work.title}</div>
     <div style={{ position: "absolute", top: 16, right: 12, fontSize: 10.5, color: T.sub, letterSpacing: 1, textShadow: "0 1px 4px #000" }}>{work.min} min</div>
+    {work.sample && (
+      <div style={{ position: "absolute", top: 16, left: 12, fontSize: 9, letterSpacing: 2, color: T.sub, border: `1px solid ${T.line}`, padding: "2px 6px", borderRadius: 2, background: "rgba(0,0,0,.45)", textTransform: "uppercase" }}>Sample</div>
+    )}
   </div>
 );
 
@@ -526,6 +534,7 @@ function Home({ works, avg, goWork, goCreator, goCollective }) {
             }}>
               <span style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: T.amber, width: 78 }}>{u.kind}</span>
               <span style={{ fontSize: 13, fontWeight: 500 }}>{name}</span>
+              {!isGroup && CREATORS[u.who].sample && <SampleBadge />}
               <span style={{ fontSize: 13, color: T.sub }}>{u.text}</span>
               <span style={{ marginLeft: "auto", fontSize: 11, color: T.sub }}>{u.when}</span>
             </div>
@@ -591,6 +600,7 @@ function WorkPage({ work, avg, liked, toggleLike, goCreator, goWork, goCollectiv
 
       <div style={{ display: "flex", alignItems: "baseline", gap: 14, margin: "20px 0 4px", flexWrap: "wrap" }}>
         <h1 style={{ fontFamily: display, fontSize: 36, fontWeight: 700, margin: 0 }}>{work.title}</h1>
+        {work.sample && <SampleBadge />}
         <span style={{ color: T.sub, fontSize: 13 }}>{work.year} · {work.min} min · {work.views.toLocaleString()} views</span>
         <button onClick={() => toggleLike(work.id)} style={{
           marginLeft: "auto", background: "none", cursor: "pointer",
@@ -730,6 +740,7 @@ function CreatorPage({ creator, works, follows, toggleFollow, goWork, goCollecti
         <div style={{ flex: 1, minWidth: 240 }}>
           <div style={{ display: "flex", alignItems: "baseline", gap: 12, flexWrap: "wrap" }}>
             <h1 style={{ fontFamily: display, fontSize: 32, fontWeight: 700, margin: 0 }}>{creator.name}</h1>
+            {creator.sample && <SampleBadge />}
             <span style={{ color: T.sub, fontSize: 12, letterSpacing: 1 }}>{creator.role}</span>
           </div>
           <p style={{ color: T.sub, fontSize: 13.5, lineHeight: 1.8, margin: "10px 0 12px", maxWidth: 560 }}>{creator.bio}</p>
