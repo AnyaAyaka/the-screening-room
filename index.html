@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex" />
 <title>The Screening Room — Where films and filmmakers get found</title>
+<meta property="og:type" content="website" />
+<meta property="og:title" content="The Screening Room" />
+<meta property="og:description" content="Where films and filmmakers get found. Short films, structured credits, festival results, and the people behind them." />
+<meta property="og:url" content="https://anyaayaka.github.io/the-screening-room/" />
+<meta property="og:image" content="https://anyaayaka.github.io/the-screening-room/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="The Screening Room" />
+<meta name="twitter:description" content="Where films and filmmakers get found. Short films, structured credits, festival results, and the people behind them." />
+<meta name="twitter:image" content="https://anyaayaka.github.io/the-screening-room/og-image.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Archivo:wght@400;500;700&display=swap" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
@@ -34,41 +45,23 @@ const body = "'Archivo', sans-serif";
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                           */
-/*  EDIT HERE: titles / synopses / credits are placeholders.            */
-/*  Works w1 and w2 use the real trailers (yt = YouTube video ID).      */
+/*  EDIT HERE: w0 (Echoes) and w1 (Julia Never Dies) are real films.    */
+/*  Everything else is sample data to overwrite.                        */
 /* ------------------------------------------------------------------ */
 const CREATORS = {
   c5: {
-    id: "c5", name: "Derek Ziegler", role: "Director / Writer / Editor",
-    bio: "Orlando-based filmmaker behind the collective Rotten Rabbit. A 48 Hour Film Project regular, writing, directing, shooting and editing his own shorts.",
-    awards: [
-      "48HFP Orlando 2022 — Best Writing, Directing, Cinematography & Editing (A Murder Most Trivial)",
-      "48HFP Orlando — Best Film 1st Place, Best Writing (Picture Perfect)",
-      "Love Your Shorts Film Festival 2023 — Official Selection",
-    ],
-    sns: { YouTube: "https://youtube.com/RottenRabbitTV" },
-    status: "Released", statusWork: "Haze / The Deal",
-  },
-  c6: {
-    id: "c6", name: "Julia Dansereau", role: "Actor / Producer",
-    bio: "Actor and producer. Plays Ashleigh in Haze.",
+    id: "c5", name: "Jack Strange", role: "Actor",
+    bio: "Lead actor in Julia Never Dies. Bio coming soon.",
     awards: [],
     sns: {},
-    status: "Released", statusWork: "Haze",
-  },
-  c7: {
-    id: "c7", name: "Amanda Diaz", role: "Actor",
-    bio: "Actor. Plays Mariah in Haze.",
-    awards: [],
-    sns: {},
-    status: "Released", statusWork: "Haze",
+    status: "Released", statusWork: "Julia Never Dies",
   },
   c1: {
     id: "c1", name: "Jun Yoriko", role: "Director / Writer",
-    bio: "Leads an independent film collective. A regular at 48-hour film competitions, exploring improvisation under constraint.",
-    awards: ["48HFP Tokyo 2024 — Jury Special Prize", "TINFF 2025 — Official Selection"],
+    bio: "Filmmaker behind the Paradigm Shift collective. Writes in Japanese, shoots in English, and builds films inside 48-hour constraints.",
+    awards: [],   /* festival results now come from the works' festival entries */
     sns: { Instagram: "#", X: "#", YouTube: "#" },
-    status: "In production", statusWork: "Next project",
+    status: "In development", statusWork: "Next project",
   },
   c2: {
     id: "c2", name: "Akari Mizuhara", role: "Actor",
@@ -97,52 +90,77 @@ const CREATORS = {
 const COLLECTIVES = {
   g1: {
     id: "g1",
-    name: "Rotten Rabbit",
-    tagline: "Independent film collective — Orlando, FL",
-    bio: "A filmmaking collective led by Derek Ziegler, producing shorts and web series since 2018. Regulars at the 48 Hour Film Project Orlando, with multiple category wins.",
-    members: ["c5", "c6", "c7"],
-    sns: { YouTube: "https://youtube.com/RottenRabbitTV" },
+    name: "Paradigm Shift",
+    tagline: "Independent film collective",
+    bio: "A film collective led by Jun Yoriko, writing in Japanese and shooting in English for international audiences. Entered the 48 Hour Film Project through to the global round.",
+    members: ["c1", "c5"],              /* EDIT: add the rest of the team */
+    sns: { Instagram: "#", YouTube: "#" },
   },
 };
 
 const WORKS = [
   {
-    id: "w1",
-    title: "Haze",
-    year: 2025, min: 8,
-    yt: "g4vC9yPKymU",              /* swap with w2's ID if reversed */
+    id: "w0",
+    title: "Echoes",
+    year: 2026, min: 6,             /* EDIT: real runtime */
+    yt: "-PSCbWVB6SQ",
     collective: "g1",
-    genre: ["Horror", "Thriller"],
-    synopsis: "After surviving a kidnapping, a young woman tells her story on television — and draws the unsettling attention of a local journalist. A Rotten Rabbit production.",
+    genre: ["Drama"],               /* EDIT: real genre */
+    synopsis: "A Paradigm Shift film. Synopsis coming soon.",
     credits: [
-      { role: "Director / Writer", id: "c5" },
-      { role: "Cast — Ashleigh", id: "c6" },
-      { role: "Cast — Mariah", id: "c7" },
+      { role: "Director", id: "c1" },   /* EDIT: add cast and crew */
     ],
     editorsPick: true,
+    hue: "#2A3038",
+    reviews: [],
+    likes: 96,
+    views: 1840,
+  },
+  {
+    id: "w1",
+    title: "Julia Never Dies",
+    year: 2026, min: 5,             /* EDIT: real runtime */
+    /* yt: "PASTE_ID_HERE", */      /* EDIT: uncomment when its video is online */
+    collective: "g1",
+    genre: ["Music Video"],
+    synopsis: "A live-action PV made inside the 48 Hour Film Project: written in Japanese, shot in English, and built around one required line. \"There's got to be more to life than this.\" A Paradigm Shift production.",
+    credits: [
+      { role: "Director / Writer", id: "c1" },
+      { role: "Cast", id: "c5" },   /* EDIT: add the other lead and crew */
+    ],
+    editorsPick: false,
     hue: "#3A2E22",
     reviews: [
       { user: "filmnerd_92", stars: 5, spoiler: false, text: "Sample review — the reviews here are placeholders you can post over." },
     ],
     likes: 128,
+    views: 920,
+    festival: [
+      { festival: "48 Hour Film Project", year: 2026, type: "selected", detail: "Global round", verified: true },
+    ],
   },
   {
     id: "w2",
-    title: "The Deal",
-    year: 2026, min: 2,
-    yt: "tAHg0Pm5aUM",              /* swap with w1's ID if reversed */
-    collective: "g1",
-    genre: ["Short"],
-    synopsis: "Trailer for The Deal, a 2026 short from Rotten Rabbit, written and directed by Derek Ziegler. Synopsis coming soon.",
+    title: "The Pier",
+    year: 2026, min: 15,
+    genre: ["Drama"],
+    synopsis: "A dock worker coming off a night shift and a runaway high-schooler share three near-silent hours on the pier, waiting for the first train. (Sample work — no video attached.)",
     credits: [
-      { role: "Director / Writer", id: "c5" },
+      { role: "Director", id: "c3" },
+      { role: "Cast", id: "c2" },
+      { role: "Music", id: "c4" },
     ],
     editorsPick: false,
     hue: "#22303A",
     reviews: [
-      { user: "shortfilm_diary", stars: 4, spoiler: false, text: "Sample review for the second trailer." },
+      { user: "harbourtown_cinema", stars: 4, spoiler: false, text: "Almost no dialogue, yet you feel the distance between them closing shot by shot." },
     ],
     likes: 86,
+    views: 640,
+    festival: [
+      { festival: "Harbour Shorts", year: 2026, type: "nominated", award: "Best Actress", who: "c2", verified: true },
+      { festival: "Harbour Shorts", year: 2026, type: "won", award: "Audience Award", verified: false },
+    ],
   },
   {
     id: "w3",
@@ -150,7 +168,7 @@ const WORKS = [
     genre: ["Comedy"],
     synopsis: "The caretaker of a shuttered amusement park runs the empty merry-go-round every night. One night, the speed lever breaks. (Sample work — no video attached.)",
     credits: [
-      { role: "Director / Writer", id: "c1" },
+      { role: "Director / Writer", id: "c2" },
       { role: "Cinematography", id: "c3" },
     ],
     editorsPick: false, hue: "#3A2237",
@@ -159,6 +177,10 @@ const WORKS = [
       { user: "nightview", stars: 3, spoiler: true, text: "Saw the ending coming, but I can't forget how they shot the park at night." },
     ],
     likes: 214,
+    views: 3120,
+    festival: [
+      { festival: "Night Reel Festival", year: 2025, type: "selected", verified: false },
+    ],
   },
   {
     id: "w4",
@@ -172,7 +194,16 @@ const WORKS = [
     editorsPick: false, hue: "#2E3522",
     reviews: [],
     likes: 42,
+    views: 412,
   },
+];
+
+/* Activity feed — derived from project updates, not a blog creators must write */
+const UPDATES = [
+  { who: "c1", kind: "Status", text: "Next project moved into development", when: "2d ago" },
+  { who: "g1", kind: "Festival", text: "Julia Never Dies — 48 Hour Film Project global round result added", when: "1w ago" },
+  { who: "c3", kind: "Production", text: "The Pier — edit locked", when: "2w ago" },
+  { who: "c2", kind: "Release", text: "Letters Arrive on Monday published", when: "3w ago" },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -192,6 +223,24 @@ const Tag = ({ children }) => (
 
 const StatusBadge = ({ status }) => (
   <span style={{ fontSize: 10.5, padding: "3px 9px", letterSpacing: 1.5, textTransform: "uppercase", color: T.amber, border: `1px solid ${T.amberDim}`, borderRadius: 2 }}>{status}</span>
+);
+
+/* One festival result: selection / nomination / win, with festival verification */
+const ResultChip = ({ e, workTitle }) => (
+  <div style={{ display: "flex", alignItems: "baseline", gap: 10, padding: "9px 0", borderBottom: `1px dotted ${T.line}`, flexWrap: "wrap" }}>
+    <span style={{
+      fontSize: 10, letterSpacing: 2, textTransform: "uppercase",
+      color: e.type === "won" ? T.bg : e.type === "nominated" ? T.amber : T.sub,
+      background: e.type === "won" ? T.amber : "transparent",
+      border: `1px solid ${e.type === "won" || e.type === "nominated" ? T.amberDim : T.line}`,
+      padding: "2px 8px", borderRadius: 2,
+    }}>{e.type === "won" ? "Winner" : e.type === "nominated" ? "Nominee" : "Official Selection"}</span>
+    <span style={{ fontFamily: display, fontSize: 15 }}>{e.festival} {e.year}</span>
+    {e.award && <span style={{ fontSize: 12.5, opacity: 0.9 }}>{e.award}{e.who ? ` — ${CREATORS[e.who].name}` : ""}</span>}
+    {e.detail && <span style={{ fontSize: 12, color: T.sub }}>{e.detail}</span>}
+    {workTitle && <span style={{ fontSize: 12, color: T.sub, fontStyle: "italic" }}>{workTitle}</span>}
+    {e.verified && <span style={{ marginLeft: "auto", fontSize: 10, color: T.amber, letterSpacing: 1.5 }}>VERIFIED BY FESTIVAL</span>}
+  </div>
 );
 
 /* Thumbnail: real YouTube thumbnail when the work has a video ID */
@@ -264,7 +313,7 @@ function App() {
       </header>
 
       <main style={{ maxWidth: 880, margin: "0 auto", padding: "26px 22px 80px" }}>
-        {view.page === "home" && <Home works={works} avg={avg} goWork={goWork} goCreator={goCreator} />}
+        {view.page === "home" && <Home works={works} avg={avg} goWork={goWork} goCreator={goCreator} goCollective={goCollective} />}
         {view.page === "work" && (
           <WorkPage
             work={works.find((w) => w.id === view.id)}
@@ -307,7 +356,7 @@ const SectionTitle = ({ children }) => (
 /* ------------------------------------------------------------------ */
 /*  Home (Discovery)                                                    */
 /* ------------------------------------------------------------------ */
-function Home({ works, avg, goWork, goCreator }) {
+function Home({ works, avg, goWork, goCreator, goCollective }) {
   const pick = works.find((w) => w.editorsPick);
   const ranked = [...works].slice().sort((a, b) => b.likes - a.likes);
   return (
@@ -327,6 +376,37 @@ function Home({ works, avg, goWork, goCreator }) {
         </span>
       </div>
 
+      <SectionTitle>Under 1,000 views</SectionTitle>
+      <div style={{ fontSize: 12.5, color: T.sub, margin: "-8px 0 14px" }}>Be early. Almost nobody has seen these yet.</div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
+        {works.filter((w) => w.views < 1000).sort((a, b) => a.views - b.views).map((w) => (
+          <div key={w.id}>
+            <Thumb work={w} onClick={() => goWork(w.id)} />
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 8 }}>
+              <span onClick={() => goWork(w.id)} style={{ fontSize: 13.5, fontWeight: 500, cursor: "pointer" }}>{w.title}</span>
+              <span style={{ fontSize: 11, color: T.amber }}>{w.views} views</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <SectionTitle>In production now</SectionTitle>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 14 }}>
+        {["c1", "c2", "c3"].map((id) => {
+          const c = CREATORS[id];
+          return (
+            <div key={id} onClick={() => goCreator(id)} style={{
+              background: T.surface, border: `1px solid ${T.line}`, borderRadius: 3,
+              padding: "12px 14px", cursor: "pointer",
+            }}>
+              <StatusBadge status={c.status} />
+              <div style={{ fontSize: 13.5, fontWeight: 500, marginTop: 8 }}>{c.name}</div>
+              <div style={{ fontSize: 12, color: T.sub, marginTop: 2 }}>{c.statusWork}</div>
+            </div>
+          );
+        })}
+      </div>
+
       <SectionTitle>New in The Screening Room</SectionTitle>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
         {works.map((w) => (
@@ -339,6 +419,25 @@ function Home({ works, avg, goWork, goCreator }) {
             <div style={{ display: "flex", gap: 6, marginTop: 6, flexWrap: "wrap" }}>{w.genre.map((g) => <Tag key={g}>{g}</Tag>)}</div>
           </div>
         ))}
+      </div>
+
+      <SectionTitle>Latest activity</SectionTitle>
+      <div style={{ border: `1px solid ${T.line}`, borderRadius: 3 }}>
+        {UPDATES.map((u, i) => {
+          const isGroup = u.who.startsWith("g");
+          const name = isGroup ? COLLECTIVES[u.who].name : CREATORS[u.who].name;
+          return (
+            <div key={i} onClick={() => isGroup ? goCollective(u.who) : goCreator(u.who)} style={{
+              display: "flex", alignItems: "baseline", gap: 12, padding: "12px 16px",
+              borderBottom: i < UPDATES.length - 1 ? `1px solid ${T.line}` : "none", cursor: "pointer", flexWrap: "wrap",
+            }}>
+              <span style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: T.amber, width: 78 }}>{u.kind}</span>
+              <span style={{ fontSize: 13, fontWeight: 500 }}>{name}</span>
+              <span style={{ fontSize: 13, color: T.sub }}>{u.text}</span>
+              <span style={{ marginLeft: "auto", fontSize: 11, color: T.sub }}>{u.when}</span>
+            </div>
+          );
+        })}
       </div>
 
       <SectionTitle>Most liked</SectionTitle>
@@ -362,6 +461,7 @@ function Home({ works, avg, goWork, goCreator }) {
 /*  Film page                                                           */
 /* ------------------------------------------------------------------ */
 function WorkPage({ work, avg, liked, toggleLike, goCreator, goWork, goCollective, works, draft, setDraft, postReview, showSpoiler, setShowSpoiler }) {
+  const [showEpk, setShowEpk] = useState(false);
   const related = works.filter((w) =>
     w.id !== work.id && w.credits.some((c) => work.credits.some((c2) => c2.id === c.id))
   );
@@ -398,7 +498,7 @@ function WorkPage({ work, avg, liked, toggleLike, goCreator, goWork, goCollectiv
 
       <div style={{ display: "flex", alignItems: "baseline", gap: 14, margin: "20px 0 4px", flexWrap: "wrap" }}>
         <h1 style={{ fontFamily: display, fontSize: 36, fontWeight: 700, margin: 0 }}>{work.title}</h1>
-        <span style={{ color: T.sub, fontSize: 13 }}>{work.year} · {work.min} min</span>
+        <span style={{ color: T.sub, fontSize: 13 }}>{work.year} · {work.min} min · {work.views.toLocaleString()} views</span>
         <button onClick={() => toggleLike(work.id)} style={{
           marginLeft: "auto", background: "none", cursor: "pointer",
           border: `1px solid ${liked[work.id] ? T.amber : T.line}`,
@@ -421,6 +521,28 @@ function WorkPage({ work, avg, liked, toggleLike, goCreator, goWork, goCollectiv
           </div>
         ))}
       </div>
+
+      {work.festival && work.festival.length > 0 && (
+        <React.Fragment>
+          <SectionTitle>Festivals & awards</SectionTitle>
+          <div style={{ maxWidth: 600 }}>
+            {work.festival.map((e, i) => <ResultChip key={i} e={e} />)}
+          </div>
+        </React.Fragment>
+      )}
+
+      <div style={{ marginTop: 22, display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+        <button onClick={() => setShowEpk(!showEpk)} style={{
+          background: "transparent", color: T.amber, border: `1px solid ${T.amberDim}`,
+          padding: "8px 18px", borderRadius: 2, fontSize: 12.5, cursor: "pointer", letterSpacing: 1,
+        }}>Press kit (PDF) · Pro</button>
+        <span style={{ fontSize: 12, color: T.sub }}>One click: stills, synopsis, credits, verified laurels, contact.</span>
+      </div>
+      {showEpk && (
+        <div style={{ marginTop: 12, background: T.surface, border: `1px solid ${T.line}`, borderRadius: 3, padding: 16, fontSize: 13, color: T.sub, maxWidth: 600, lineHeight: 1.8 }}>
+          Pro preview. The press kit bundles this page as a submission-ready PDF: poster frame, synopsis, full credits with profile links, festival laurels with verification, and your contact block. Part of the Pro plan, alongside private screener pages and audience analytics.
+        </div>
+      )}
 
       <SectionTitle>Reviews {work.reviews.length > 0 ? <span style={{ color: T.sub, fontSize: 12, fontFamily: body, fontWeight: 400 }}> avg ★{avg(work)} ({work.reviews.length})</span> : null}</SectionTitle>
 
@@ -496,6 +618,14 @@ function CreatorPage({ creator, works, follows, toggleFollow, goWork, goCollecti
   const filmo = works.filter((w) => w.credits.some((c) => c.id === creator.id));
   const following = follows[creator.id];
   const memberOf = Object.values(COLLECTIVES).filter((g) => g.members.includes(creator.id));
+  /* Festival results aggregate from the works: personal nominations, plus film-level results of credited films */
+  const festivalResults = [];
+  works.forEach((w) => {
+    (w.festival || []).forEach((e) => {
+      const credited = w.credits.some((c) => c.id === creator.id);
+      if (e.who === creator.id || (credited && !e.who)) festivalResults.push({ e, workTitle: w.title });
+    });
+  });
   return (
     <div>
       <div style={{ display: "flex", gap: 22, alignItems: "flex-start", flexWrap: "wrap" }}>
@@ -537,12 +667,15 @@ function CreatorPage({ creator, works, follows, toggleFollow, goWork, goCollecti
         <span style={{ marginLeft: "auto", fontSize: 11.5, color: T.sub }}>Read the production diary →</span>
       </div>
 
-      {creator.awards.length > 0 && (
+      {(festivalResults.length > 0 || creator.awards.length > 0) && (
         <React.Fragment>
           <SectionTitle>Awards & selections</SectionTitle>
-          {creator.awards.map((a) => (
-            <div key={a} style={{ fontSize: 13, color: T.text, opacity: 0.85, padding: "7px 0", borderBottom: `1px dotted ${T.line}` }}>◆ {a}</div>
-          ))}
+          <div style={{ maxWidth: 600 }}>
+            {festivalResults.map((r, i) => <ResultChip key={i} e={r.e} workTitle={r.workTitle} />)}
+            {creator.awards.map((a) => (
+              <div key={a} style={{ fontSize: 13, color: T.text, opacity: 0.85, padding: "7px 0", borderBottom: `1px dotted ${T.line}` }}>◆ {a}</div>
+            ))}
+          </div>
         </React.Fragment>
       )}
 
@@ -624,6 +757,25 @@ function CollectivePage({ collective, works, follows, toggleFollow, goWork, goCr
             </div>
           </div>
         ))}
+      </div>
+
+      <SectionTitle>Activity</SectionTitle>
+      <div style={{ border: `1px solid ${T.line}`, borderRadius: 3 }}>
+        {UPDATES.filter((u) => u.who === collective.id || collective.members.includes(u.who)).map((u, i, arr) => {
+          const isGroup = u.who.startsWith("g");
+          const name = isGroup ? collective.name : CREATORS[u.who].name;
+          return (
+            <div key={i} style={{
+              display: "flex", alignItems: "baseline", gap: 12, padding: "12px 16px",
+              borderBottom: i < arr.length - 1 ? `1px solid ${T.line}` : "none", flexWrap: "wrap",
+            }}>
+              <span style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: T.amber, width: 78 }}>{u.kind}</span>
+              <span style={{ fontSize: 13, fontWeight: 500 }}>{name}</span>
+              <span style={{ fontSize: 13, color: T.sub }}>{u.text}</span>
+              <span style={{ marginLeft: "auto", fontSize: 11, color: T.sub }}>{u.when}</span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
